@@ -1,16 +1,19 @@
-import org.h2.Driver;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBHandler {
-    private static final String URL = "jdbc:h2:~/test2";
+
+    // embedded mood
+    // private static final String URL = "jdbc:h2:~/test";
+
+    // server mood
+    private static final String URL = "jdbc:h2:tcp://localhost/~/test";
     private static final String DRIVER = "org.h2.Driver";
-    private static final String USERNAME = "admin";
+    private static final String USERNAME = "sa";
     private static final String PASSWORD = "123";
 
-    private Connection conn;
+    private Connection connection;
 
     static {
         try {
@@ -20,26 +23,29 @@ public class DBHandler {
         }
     }
 
-    public void open() {
-        try {
-            if (conn == null || conn.isClosed()) {
-                conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                System.out.println("connection created");
-            }
-        } catch (SQLException e) {
-            System.out.println("connection error");
+    public Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            connection = openConnection();
         }
+        return connection;
+    }
+
+    private Connection openConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
     public void close() {
         try {
-            if (conn != null && !conn.isClosed()) {
-                conn.close();
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
                 System.out.println("connection closed");
             }
         } catch (SQLException e) {
-            System.out.println("connection error");
+            System.out.println("connection close error");
         }
     }
 
+    /*public Connection getConnection() {
+        return connection;
+    }*/
 }

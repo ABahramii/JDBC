@@ -1,9 +1,27 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         DBHandler dbHandler = new DBHandler();
 
-        dbHandler.open();
-        Thread.sleep(5 * 1000);
-        dbHandler.close();
+        String query = """
+                CREATE TABLE personnel (
+                    ID INT PRIMARY KEY auto_increment,
+                    owner varchar2(50),
+                    balance number,
+                    acc_number varchar2(16)
+                )
+                """;
+
+        try (Connection connection = dbHandler.getConnection()) {
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
