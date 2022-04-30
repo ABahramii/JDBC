@@ -3,7 +3,7 @@ public class Main {
         DBHandler dbHandler = new DBHandler();
 
         dbHandler.open();
-        Thread.sleep(2 * 1000);
+        Thread.sleep(5 * 1000);
         dbHandler.close();
     }
 }
